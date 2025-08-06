@@ -1,0 +1,70 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hello", "Hey", "Good morning", "Good evening"],
+      "responses": ["Hello!", "Hi there!", "Hey!", "Greetings!"],
+      "context": [""]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "Goodbye", "See you later", "Talk to you soon"],
+      "responses": ["Goodbye!", "Take care!", "See you later!", "Have a great day!"],
+      "context": [""]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "I appreciate it", "Much obliged"],
+      "responses": ["You're welcome!", "No problem!", "Glad I could help!"],
+      "context": [""]
+    },
+    {
+      "tag": "noanswer",
+      "patterns": [],
+      "responses": ["I'm sorry, I don't understand that.", "Can you please repeat?", "I didn't catch that."],
+      "context": [""]
+    },
+    {
+      "tag": "Identity",
+      "patterns": ["Who are you?", "What is your name?", "Identify yourself"],
+      "responses": ["I am Buddy AI, your personal AI assistant.", "You can call me Buddy."],
+      "context": [""]
+    },
+    {
+      "tag": "datetime",
+      "patterns": ["What time is it?", "Tell me the time", "What's the date today?", "Current date and time"],
+      "responses": ["Let me check the time and date for you..."],
+      "context": [""]
+    },
+    {
+      "tag": "whatsup",
+      "patterns": ["What's up?", "What's going on?", "What's new?"],
+      "responses": ["All good here. How can I help you?", "Just waiting for your command!", "Everything's running smoothly."],
+      "context": [""]
+    },
+    {
+      "tag": "programmer",
+      "patterns": ["Who made you?", "Who is your developer?", "Who programmed you?"],
+      "responses": ["I was made by Iqbal Ahmad."],
+      "context": [""]
+    },
+    {
+      "tag": "appreciate",
+      "patterns": ["You're smart", "You're intelligent", "You're amazing"],
+      "responses": ["Thank you!", "You're too kind!", "I try my best!"],
+      "context": [""]
+    },
+    {
+      "tag": "nicetty",
+      "patterns": ["Nice talking to you", "You're nice", "I like chatting with you"],
+      "responses": ["I'm glad you enjoy it!", "The pleasure is mine!", "Thanks! I'm always here to chat."],
+      "context": [""]
+    },
+    {
+      "tag": "greetreply",
+      "patterns": ["How are you?", "How's it going?", "How do you do?"],
+      "responses": ["I'm functioning as expected!", "Doing great, thanks for asking!", "All systems go!"],
+      "context": [""]
+    }
+  ]
+}
