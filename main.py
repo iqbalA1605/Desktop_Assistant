@@ -7,6 +7,26 @@ import subprocess
 import pyttsx3
 import speech_recognition as sr
 import pyautogui
+import json
+import pickle
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import random
+import numpy as np
+import psutil
+
+# from test_model import input_text
+
+with open('intents.json') as file:
+    data = json.load(file)
+
+model = load_model('chat_model.h5')
+
+with open('tokenizer.pkl', 'rb') as f:
+    tokenizer = pickle.load(f)
+
+with open('label_encoder.pkl', 'rb') as encoder_file:
+    label_encoder = pickle.load(encoder_file)
 
 
 def initialize_engine():
@@ -20,9 +40,10 @@ def initialize_engine():
     return engine
 
 def speak(text):
-    engine =  initialize_engine()
+    engine = initialize_engine()
     engine.say(text)
     engine.runAndWait()
+
 
 def command():
     r = sr.Recognizer()
@@ -114,16 +135,16 @@ def schedule():
         speak(week[day])
 
 def openapp(command):
-    if 'calculator' in query:
+    if 'calculator' in command:
         speak('Opening calculator')
         os.startfile(r"C:\Windows\System32\calc.exe")
-    elif 'notepad' in query:
+    elif 'notepad' in command:
         speak('Opening notepad')
         os.startfile(r"C:\Windows\System32\notepad.exe")
-    elif 'vs' in query:
+    elif 'vs' in command:
         speak('Opening vs code')
         os.startfile(r"C:\Users\Akhlaque Ahmad\AppData\Local\Programs\Microsoft VS Code\Code.exe")
-    elif 'android studio' in query:
+    elif 'android studio' in command:
         speak('Opening android studio')
         os.startfile(r"C:\Program Files\Android\Android Studio\bin\studio64.exe")
     # elif 'vlc media player' in query:
@@ -131,19 +152,40 @@ def openapp(command):
     #     os.startfile(r"C:\Program Files\VideoLAN\VLC\vlc.exe")
 
 
-def closeapp(comment):
-    if 'calculator' in query:
+def closeapp(command):
+    if 'calculator' in command:
         speak('closing calculator')
         os.system('taskkill /f /im.calc.exe')
-    elif 'notepad' in query:
+    elif 'notepad' in command:
         speak('closing notepad')
         os.system("taskkill /f /im notepad.exe")
-    elif 'vs' in query:
+    elif 'vs' in command:
         speak('closing vs code')
         os.system("taskkill /f /im Code.exe")
-    elif 'android studio' in query:
+    elif 'android studio' in command:
         speak('closing android studio')
         os.system("taskkill /f /im studio64.exe")
+
+def browsing(query):
+    if 'google' in query:
+        speak('hey buddy, what should i search on google..')
+        search = command().lower()
+        webbrowser.open(f"{search}")
+
+
+def condition():
+    usage = str(psutil.cpu_percent())
+    speak(f"CPU is at {usage} percentage.")
+    battery = psutil.sensors_battery()
+    percentage = battery.percent
+    speak(f"The battery is at {percentage} percent.")
+
+    if percentage >= 50:
+        speak('There is enough battery to be continue.')
+    elif percentage >= 35 and percentage >= 45:
+        speak('Connect the system for charging.')
+    else:
+        speak('The system has low battery, please connect it to charge.')
 
 
 if __name__ == '__main__':
@@ -168,6 +210,20 @@ if __name__ == '__main__':
             openapp(query)
         elif ('close calculator' in query) or ('close notepad' in query) or ('close pycharm' in query) or ('close vs' in query) or ('close android studio' in query) or ('close vlc media player' in query):
             closeapp(query)
+        elif('what' in query) or ('who' in query) or ('how' in query) or ('hi' in query) or ('thanks' in query) or ('hello' in query):
+            padded_sequences = pad_sequences(tokenizer.texts_to_sequences([query]), maxlen=20, truncating='post')
+            result = model.predict(padded_sequences)
+            tag = label_encoder.inverse_transform([np.argmax(result)])
+            tag = tag[0]
+
+            for i in data['intents']:
+                if i['tag'] == tag:
+                    speak(np.random.choice(i['responses']))
+        elif('open google' in query):
+            browsing(query)
+        elif('system condition' in query):
+            speak('checking the system condition')
+            condition()
         elif "exit" in query:
             sys.exit()
 
