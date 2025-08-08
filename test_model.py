@@ -23,6 +23,6 @@ while True:
     result = model.predict(padded_sequences)
     tag = label_encoder.inverse_transform([np.argmax(result)])
 
-    for i in data['intent']:
-        if i['tags'] == tag:
+        for i in data['intents']:
+        if i['tag'] == tag:
             print(np.random.choice(i['responses']))
